@@ -1,21 +1,23 @@
-This repository contains a tool for checking chase termination for linear and simple linear existential rules introduced in the paper "Semi-Oblivious Chase Termination for Linear Existential Rules" as well as a data generator and rule generator for testing the tool. The repository also includes sample data and rules that are generated using the data and rule generators.
+This repository contains a tool for checking chase termination for linear and simple linear existential rules introduced in the paper [**"Semi-Oblivious Chase Termination for Linear Existential Rules"**](https://github.com/mostafamilani/chase-termination/blob/main/chase-termination.pdf) as well as a data generator and rule generator for testing the tool. The repository also includes sample data and rules that are generated using the data and rule generators.
 
 The structure of the respository is as follows:
-- scenarios includes the sample data and rules and their descrition. 
-- generators contains the code for the data generator and the rule generator and a brief description of how they can be used.
-- chase-termination includes the complete implementation of the termination algorithm for simple linear and linear ruels.
+- \"scenarios\" includes the sample data and rules and their descrition. 
+- \"generators\" contains the code for the data generator and the rule generator and a brief description of how they can be used.
+- \"chase-termination\" includes the complete implementation of the termination algorithm for simple linear and linear ruels.
 
 To run the chase termination algorithm for a set of rules "rules.txt", use the following command:
 
-```check -f rules.txt -d dbname -U username -P password -o output.res```
+```check -f rules.txt -d dbname -dsize size -U username -P password -o output.res```
 
-where "-f" is a required option that specifies the input file that contains the set of rules. "-d dbname", "-U username", and "-P password" arespecify the database connection information for running the algorithm for linear rules. If they are included the tool will run the termination algorithm for linear rules, otherwise it runs the algorithm for simple linear rules. "-o output.res" is optional and specifies the output file name. The defail output is "rules.res" if the input file is "res.txt". The tool runs the chase termination algorithm, and returns whether the chase terminates along with the following additional statistics about the program in the output file:
+where "-f" is a required option that specifies the input file that contains the set of rules. "-d dbname", "-U username", and "-P password" arespecify the database connection information for running the algorithm for linear rules. "-dsize size", e.g., "-dbsize 1000" specifes the number of tuples in each table that are used in termination checking. If these database related inputs are included the tool will run the termination algorithm for linear rules, otherwise it runs the algorithm for simple linear rules. "-o output.res" is optional and specifies the output file name. The default output is "rules.res" if the input file is "res.txt". 
+
+The tool runs the chase termination algorithm, and returns whether the chase terminates along with the following additional statistics about the program in the output file:
 
 - terminates: true if the chase terminats; false otherwise.
 - avg_arity, max_arity, min_arity: The average, maximum, and minimum arities of the predicates.
-- n_rules, n_exist_vars, n_predicates: The number of rules, predicates, and the existential variables in the rules.
-- n_nodes, n_edges, n_components, n_spacial_components, n_special_edges: The number of nodes, edges, fully connected components, and fully connected components with special edges in the dependency graph of the set of rules.
-- t_parse: The time to parse the input file.
+- n_rules, n_exist_vars, n_predicates: The numbers of rules, predicates, and the existential variables in the rules.
+- n_nodes, n_edges, n_components, n_spacial_components, n_special_edges: The numbers of nodes, edges, fully connected components, and fully connected components with special edges in the dependency graph of the set of rules.
+- t_parse: The time to parse the rules in the input file.
 - t_graph: The time to build the dependency graph.
 - t_comp: The time to find special fully connected components and check for their support.
 - t_terminate: The end-to-end time to check termination.
