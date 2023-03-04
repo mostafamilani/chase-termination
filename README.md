@@ -1,9 +1,13 @@
+# Overview
+
 This repository contains a tool for checking chase termination for linear and simple linear existential rules introduced in the paper [**"Semi-Oblivious Chase Termination for Linear Existential Rules"**](https://github.com/mostafamilani/chase-termination/blob/main/chase-termination.pdf) as well as a data generator and rule generator for testing the tool. The repository also includes sample data and rules that are generated using the data and rule generators.
 
 The structure of the respository is as follows:
 - \"scenarios\" includes the sample data and rules and their descrition. 
 - \"generators\" contains the code for the data generator and the rule generator and a brief description of how they can be used.
 - \"chase-termination\" includes the complete implementation of the termination algorithm for simple linear and linear ruels.
+
+## How to use
 
 To run the chase termination algorithm for a set of rules "rules.txt", use the following command:
 
