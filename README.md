@@ -11,7 +11,7 @@ The structure of the respository is as follows:
 
 To run the chase termination algorithm for a set of rules "rules.txt", use the following command:
 
-```check -f rules.txt -d dbname -dsize size -U username -P password -o output.res```
+```check -f rules.txt -d dbname -u username -p password -t n_tuples -o output.res```
 
 where "-f" is a required option that specifies the input file that contains the set of rules. "-d dbname", "-U username", and "-P password" arespecify the database connection information for running the algorithm for linear rules. "-dsize size", e.g., "-dbsize 1000" specifes the number of tuples in each table that are used in termination checking. If these database related inputs are included the tool will run the termination algorithm for linear rules, otherwise it runs the algorithm for simple linear rules. "-o output.res" is optional and specifies the output file name. The default output is "rules.res" if the input file is "res.txt". 
 
