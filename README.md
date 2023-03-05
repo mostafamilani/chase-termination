@@ -13,9 +13,15 @@ To run the chase termination algorithm for a set of rules "rules.txt", use the f
 
 ```java -jar chase-termination.jar -l -f rules.txt -d dbname -u username -p password```
 
-where "-l" specifies whether the tool should run the termination algorithm for linear rulesl; if this option is missing the tool will run the algorithm for simple linear rules. "-f" is a required option that specifies the file containing the set of rules. "-d dbname", "-u username", and "-p password" specify the database connection information for running the algorithms. These are requried when "-l" is present but is optional for simple linear rules (when "-l" is not given). For simple linear rules, the algorithm assumes all predicates have extensional data if the database is missing. Another option related to the algorithm for linear rules is "-t n_tuples" that specifes the number of tuples in each relation in the termination algorithms; the algorithms uses all the tuples in the relations if this option is missing. Finally, the tool also allows "-o output.res" to specify the output file name. The default output is "rules.res" if the input file is "rules.txt". 
+The option "-l" specifies whether the tool should run the termination algorithm for linear rules; if this option is missing, the tool will run the algorithm for simple linear rules. The option "-f" is required and specifies the file containing the set of rules. 
 
-The tool runs the chase termination algorithm, and returns whether the chase terminates along with the following additional statistics about the program in the output file:
+When "-l" is present, the tool requires the database connection information specified by "-d dbname", "-u username", and "-p password". However, when "-l" is not given for simple linear rules, these options are optional. If the database is missing, the algorithm for simple linear rules assumes that all predicates have extensional data.
+
+The option "-t n_tuples" is related to the algorithm for linear rules and specifies the number of tuples in each relation in the termination algorithm. If this option is missing, the algorithm uses all tuples in the relations.
+
+To specify an output file name, use the option "-o output.res". The default output file name is "rules.res" if the input file is "rules.txt".
+
+The tool executes the chase termination algorithm and returns whether the chase terminates. Additionally, the output file contains statistics about the program.
 
 - terminates: true if the chase terminats; false otherwise.
 - avg_arity, max_arity, min_arity: The average, maximum, and minimum arities of the predicates.
