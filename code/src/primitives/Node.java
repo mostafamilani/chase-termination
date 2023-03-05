@@ -51,6 +51,7 @@ public class Node {
             edge.destination = next;
             edge.special = special;
             added = true;
+            nexts.add(edge);
         }
         Edge pEdge = next.prevEdge(this);
         if (pEdge == null) {

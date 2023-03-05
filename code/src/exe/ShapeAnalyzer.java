@@ -3,6 +3,7 @@ package exe;
 import db.Program;
 import db.Schema;
 import primitives.Predicate;
+import synthetic.ProgramGenerator;
 
 import java.io.*;
 import java.sql.*;
@@ -25,6 +26,10 @@ public class ShapeAnalyzer {
         }
         conn.close();
         return result;
+    }
+
+    public static String getRandomId(int arity) {
+        return SyntacticAnalyzer.annotations[ProgramGenerator.randomInRange(new int[]{1,SyntacticAnalyzer.annotationCounts[arity]})].substring(0,arity);
     }
 
     public static Map<Predicate, Set<String>> findShapes(Set<Predicate> predicates, Program program, int size, Connection conn) throws SQLException {

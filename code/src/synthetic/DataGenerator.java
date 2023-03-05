@@ -3,6 +3,8 @@ package synthetic;
 import exceptions.InvalidOptionException;
 import db.Schema;
 import exe.AnalyzerExec;
+import exe.ShapeAnalyzer;
+import exe.SyntacticAnalyzer;
 import primitives.Predicate;
 
 import java.io.BufferedWriter;
@@ -117,16 +119,39 @@ public class DataGenerator {
         }
         query = new StringBuilder(query.substring(0, query.length() - 1) + ") values ");
         for (int i = 0; i < nrecords; i++) {
-            query.append("(");
-            for (int j = 0; j < predicate.arity; j++) {
-                query.append(ProgramGenerator.randomInRange(new int[]{0, domainSize})).append(",");
-            }
-            query = new StringBuilder(query.substring(0, query.length() - 1) + "),");
+            query = getRandomRecordByShape(predicate, domainSize, query);
         }
         query = new StringBuilder(query.substring(0, query.length() - 1) + ";");
         Statement statement = conn.createStatement();
         statement.executeUpdate(query.toString());
         statement.close();
+    }
+
+    /*
+    * Don't remove! This is an alternative way of generating records and is useful for testing.
+    * */
+    private static StringBuilder getRandomRecord(Predicate predicate, int domainSize, StringBuilder query) {
+        query.append("(");
+        for (int j = 0; j < predicate.arity; j++) {
+            query.append(ProgramGenerator.randomInRange(new int[]{0, domainSize})).append(",");
+        }
+        query = new StringBuilder(query.substring(0, query.length() - 1) + "),");
+        return query;
+    }
+
+
+    private static StringBuilder getRandomRecordByShape(Predicate predicate, int domainSize, StringBuilder query) {
+        String id = ShapeAnalyzer.getRandomId(predicate.arity);
+        Map<Character,Integer> values = new HashMap<>();
+        query.append("(");
+        for (int i = 0; i < id.length(); i++) {
+            Character c = id.charAt(i);
+            if (!values.containsKey(c)) values.put(c, ProgramGenerator.randomInRange(new int[]{0, domainSize}));
+            Integer value = values.get(c);
+            query.append(value).append(",");
+        }
+        query = new StringBuilder(query.substring(0, query.length() - 1) + "),");
+        return query;
     }
 
     private static void createSchema(Connection conn, Set<String> ddlQueries) throws SQLException {
