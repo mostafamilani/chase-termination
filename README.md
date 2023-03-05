@@ -5,15 +5,15 @@ This repository contains a tool for checking chase termination for linear and si
 The structure of the respository is as follows:
 - \"scenarios\" includes the sample data and rules and their descrition. 
 - \"generators\" contains the code for the data generator and the rule generator and a brief description of how they can be used.
-- \"chase-termination\" includes the complete implementation of the termination algorithm for simple linear and linear ruels.
+- \"code\" includes the complete implementation of the termination algorithm for simple linear and linear ruels.
 
 ## Checking chase termination 
 
 To run the chase termination algorithm for a set of rules "rules.txt", use the following command:
 
-```check -f rules.txt -d dbname -u username -p password -t n_tuples -o output.res```
+```java -jar chase-termination.jar -f rules.txt -d dbname -u username -p password -t n_tuples -o output.res```
 
-where "-f" is a required option that specifies the input file that contains the set of rules. "-d dbname", "-U username", and "-P password" arespecify the database connection information for running the algorithm for linear rules. "-dsize size", e.g., "-dbsize 1000" specifes the number of tuples in each table that are used in termination checking. If these database related inputs are included the tool will run the termination algorithm for linear rules, otherwise it runs the algorithm for simple linear rules. "-o output.res" is optional and specifies the output file name. The default output is "rules.res" if the input file is "res.txt". 
+where "-f" is a required option that specifies the input file that contains the set of rules. "-d dbname", "-U username", and "-P password" arespecify the database connection information for running the algorithm for linear rules. "-t n_tuples", e.g., "-t 1000" specifes the number of tuples in each table that are used in termination checking. If these database related inputs are included the tool will run the termination algorithm for linear rules, otherwise it runs the algorithm for simple linear rules. "-o output.res" is optional and specifies the output file name. The default output is "rules.res" if the input file is "res.txt". 
 
 The tool runs the chase termination algorithm, and returns whether the chase terminates along with the following additional statistics about the program in the output file:
 
