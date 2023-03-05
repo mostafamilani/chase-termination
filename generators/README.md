@@ -1,29 +1,24 @@
 # Synthetic Data and Rule Generation
 
-The generators are recieved tunning parameters that characterize the database and the set of rules to be generated. The data generator generates a database in which tuples with different shapes appear. The rule generator generates rules with body atoms of different shapes. The applications of these generators is briefly explained next.
+This repository contains generators for synthetic data and rules. The generators receive tuning parameters that characterize the database and the set of rules to be generated. These generators consider possible shape; The data generator selects tuples of different shapes and the rule generator uses atoms of different shapes in the body of the rules. The applications of these generators are briefly explained below.
 
 ## Data Generator
 
-The following command invokes the data generator and creates a database with name "dbname" with "n_relations" relations each of which has "n_tuples" tuples in it. 
+To generate a synthetic database, run the following command:
 
 ```
-dbgenerate -U username -P password -d dbname -size n_tuples -min min_attr -max max_attr -dm dm_dize
+java -jar data-generator.jar -u username -p password -d dbname -t n_tuples -min min_arity -max max_arity -dm dm_dize
 ```
 
-"min_att" and "max_att" specify the minimum and the maximum number of attributes in each relation. The generator returns a file "dbname.txt" that contains schema information of the generated database. The relations have schema "P_i(c_1,c_2,...,c_k)" where i is in [1,n_relations] and k is randomly selected from the range [min_att,max_att]. The tuples in the relations are from a domain set {1,2,...,dmsize}.
+Here, "username" and "password" are the credentials for the database connection. "dbname" is the name of the database instance to be filled with new tuples (it must be created before running the database generator). "n_tuples" specifies the number of tuples in each relation. "min_arity" and "max_arity" specify the minimum and the maximum number of attributes in each relation, respectively. "dm_size" specifies the size of the domain set, i.e., the range of values that can be assigned to the attributes.
+
+The generator returns a file "dbname.txt" that contains schema information of the generated database. This file can be passed to the rule-generator to use the same schema. The relations have schema "P_i(c_1,c_2,...,c_k)" where i is in [1,n_relations] and k is randomly selected from the range [min_arity,max_arity]. The tuples in the relations are from a domain set {1,2,...,dm_size}.
 
 ## Rule Generator
 
-To invoke the rule generator, run the following command:
+To generate synthetic rules, run the following command:
 
 ```
-rgenerate -s/-l -r n_rules -p n_predicates -min min_arity -max max_arity -o rules.txt
+java -jar rule-generator.jar -l -r n_rules -p n_predicates -min min_arity -max max_arity -o rules.txt
 ```
-The resuls is a set of simple linear or linear depending on whether "-s" or "-l" are respectively included in the command. "n_rules", "n_predicates", "min_arity", and "max_arity" specify the characterisitcs of the set of rules, and "rules.txt" is the output file where the rules are returned.
-
-<!--
-createdb -U username -O ownername -E UTF8 -T template0 -l en_US.UTF-8 databasename
-psql -U username -d databasename -f filename.sql
-pg_restore -U postgres -C -d chasedb d.sql
--->
-
+Here, "-l" indicates that the rules should be linear, and if omitted, the rules will be simple linear. "n_rules" specifies the number of rules to be generated. "n_predicates" specifies the number of predicates in the body of each rule. "min_arity" and "max_arity" specify the minimum and the maximum number of arguments in each predicate, respectively. "rules.txt" is the file where the rules will be written.
