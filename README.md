@@ -11,9 +11,9 @@ The structure of the respository is as follows:
 
 To run the chase termination algorithm for a set of rules "rules.txt", use the following command:
 
-```java -jar chase-termination.jar -f rules.txt -d dbname -u username -p password -t n_tuples -o output.res```
+```java -jar chase-termination.jar -l -f rules.txt -d dbname -u username -p password```
 
-where "-f" is a required option that specifies the input file that contains the set of rules. "-d dbname", "-U username", and "-P password" arespecify the database connection information for running the algorithm for linear rules. "-t n_tuples", e.g., "-t 1000" specifes the number of tuples in each table that are used in termination checking. If these database related inputs are included the tool will run the termination algorithm for linear rules, otherwise it runs the algorithm for simple linear rules. "-o output.res" is optional and specifies the output file name. The default output is "rules.res" if the input file is "res.txt". 
+where "-l" specifies whether the tool should run the termination algorithm for linear rulesl; if this option is missing the tool will run the algorithm for simple linear rules. "-f" is a required option that specifies the file containing the set of rules. "-d dbname", "-u username", and "-p password" specify the database connection information for running the algorithms. These are requried when "-l" is present but is optional for simple linear rules (when "-l" is not given). For simple linear rules, the algorithm assumes all predicates have extensional data if the database is missing. Another option related to the algorithm for linear rules is "-t n_tuples" that specifes the number of tuples in each relation in the termination algorithms; the algorithms uses all the tuples in the relations if this option is missing. Finally, the tool also allows "-o output.res" to specify the output file name. The default output is "rules.res" if the input file is "rules.txt". 
 
 The tool runs the chase termination algorithm, and returns whether the chase terminates along with the following additional statistics about the program in the output file:
 
