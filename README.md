@@ -11,7 +11,9 @@ The structure of the respository is as follows:
 
 To run the chase termination algorithm for a set of rules "rules.txt", use the following command:
 
-```java -jar chase-termination.jar -l -f rules.txt -d dbname -u username -p password```
+```
+java -jar chase-termination.jar -l -f rules.txt -d dbname -u username -p password
+```
 
 The option "-l" specifies whether the tool should run the termination algorithm for linear rules; if this option is missing, the tool will run the algorithm for simple linear rules. The option "-f" is required and specifies the file containing the set of rules. 
 
