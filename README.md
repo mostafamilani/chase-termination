@@ -7,7 +7,7 @@ The structure of the respository is as follows:
 - \"generators\" contains the code for the data generator and the rule generator and a brief description of how they can be used.
 - \"code\" includes the complete implementation of the termination algorithm for simple linear and linear ruels.
 
-## Checking chase termination 
+## Checking Chase Termination 
 
 To run the chase termination algorithm for a set of rules "rules.txt", use the following command:
 
