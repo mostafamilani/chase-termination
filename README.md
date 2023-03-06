@@ -1,11 +1,11 @@
 # Overview
 
-This repository contains a tool for checking the termination of the chase procedure when applied for linear and simple linear existential rules. The tool is based on the algorithms in [**"Semi-Oblivious Chase Termination for Linear Existential Rules"**](https://github.com/mostafamilani/chase-termination/blob/main/chase-termination.pdf). The repository also includes a data generator and rule generator for testing the tool, and sample scenarios with data and rules that are generated using the data and rule generators.
+This repository contains a tool for checking the termination of the chase procedure when applied for linear and simple-linear existential rules. The tool is based on the algorithms in [**"Semi-Oblivious Chase Termination for Linear Existential Rules"**](https://github.com/mostafamilani/chase-termination/blob/main/chase-termination.pdf). The repository also includes a data generator and rule generator for testing the tool, and sample scenarios with data and rules that are generated using the data and rule generators.
 
 The structure of the respository is as follows:
 - \"scenarios\" includes sample data and rules and their descrition. 
 - \"generators\" contains the data generator and the rule generator and a brief description of how they can be used.
-- \"code\" includes the complete implementation of the termination algorithm for simple linear and linear ruels.
+- \"code\" includes the complete implementation of the termination algorithm for simple-linear and linear rules.
 
 ## Checking Chase Termination 
 
@@ -15,9 +15,9 @@ To run the chase termination algorithm for a set of rules "rules.txt", use the f
 java -jar chase-termination.jar -l -f rules.txt -d dbname -u username -p password
 ```
 
-The option "-l" specifies whether the tool should run the termination algorithm for linear rules; if this option is missing, the tool will run the algorithm for simple linear rules. The option "-f" is required and specifies the file containing the set of rules. 
+The option "-l" specifies whether the tool should run the termination algorithm for linear rules; if this option is missing, the tool will run the algorithm for simple-linear rules. The option "-f" is required and specifies the file containing the set of rules. 
 
-When "-l" is present, the tool requires the database connection information specified by "-d dbname", "-u username", and "-p password". However, when "-l" is not given for simple linear rules, these options are optional. If the database is missing, the algorithm for simple linear rules assumes that all predicates have extensional data.
+When "-l" is present, the tool requires the database connection information specified by "-d dbname", "-u username", and "-p password". However, when "-l" is not given for simple-linear rules, these options are optional. If the database is missing, the algorithm for simple-linear rules assumes that all predicates have extensional data.
 
 The option "-t n_tuples" is related to the algorithm for linear rules and specifies the number of tuples in each relation in the termination algorithm. If this option is missing, the algorithm uses all tuples in the relations.
 
@@ -25,7 +25,7 @@ To specify an output file name, use the option "-o output.res". The default outp
 
 The tool executes the chase termination algorithm and returns whether the chase terminates. Additionally, the output file contains statistics about the program.
 
-- terminates: true if the chase terminats; false otherwise.
+- terminates: true if the chase terminates; false otherwise.
 - avg_arity, max_arity, min_arity: The average, maximum, and minimum arities of the predicates.
 - n_rules, n_exist_vars, n_predicates: The numbers of rules, predicates, and the existential variables in the rules.
 - n_nodes, n_edges, n_components, n_spacial_components, n_special_edges: The numbers of nodes, edges, fully connected components, and fully connected components with special edges in the dependency graph of the set of rules.
