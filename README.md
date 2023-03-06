@@ -35,7 +35,7 @@ The tool executes the chase termination algorithm and returns whether the chase 
 - t_terminate: The end-to-end time to check termination.
 
 For the algorithm for linear rules, which involves dynamic simplification, the tool returns additional statistics related to dynamic simplificaiton:
-- n_nodes_d, n_edges_d, n_special_edges_d, n_components_d, n_spacial_components_d: The number of nodes, edges, special edges, fully connected components, and special fully connected components in the dependency graph of the dynamically simplified rules. 
-- n_facts, n_shapes: The number of facts and shapes in the database.
+- n_nodes_d, n_edges_d, n_special_edges_d, n_components_d, n_spacial_components_d: The numbers of nodes, edges, special edges, fully connected components, and special fully connected components in the dependency graph of the dynamically simplified rules. 
+- n_facts, n_shapes: The numbers of facts and shapes in the database.
 - t_graph_d: The time required to build the dependency graph of the dynamically simplified rules. 
 - t_shapes_d, t_shapes_m: The time to find the shapes (in-db and in-memory)
