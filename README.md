@@ -1,6 +1,6 @@
 # Overview
 
-This repository contains a tool for checking the termination of the chase procedure when applied for linear and simple-linear existential rules. The tool is based on the algorithms in [**"Semi-Oblivious Chase Termination for Linear Existential Rules: An Experimental Study"**](https://arxiv.org/abs/2303.12851). The repository also includes a data generator and rule generator for testing the tool, and sample scenarios with data and rules that are generated using the data and rule generators.
+This repository contains a tool for checking the termination of the chase procedure when applied for linear and simple-linear existential rules. The tool is based on the algorithms in the paper **"Semi-Oblivious Chase Termination for Linear Existential Rules: An Experimental Study"**.[^1] The repository also includes a data generator and rule generator for testing the tool, and sample scenarios with data and rules that are generated using the data and rule generators.
 
 The structure of the respository is as follows:
 - \"scenarios\" includes sample data and rules and their descrition. 
@@ -39,3 +39,16 @@ For the algorithm for linear rules, which involves dynamic simplification, the t
 - n_facts, n_shapes: The numbers of facts and shapes in the database.
 - t_graph_d: The time required to build the dependency graph of the dynamically simplified rules. 
 - t_shapes_d, t_shapes_m: The time to find the shapes (in-db and in-memory)
+
+
+## Chase-based Checking 
+
+We use VLog,[^2] a state-of-the-art reasoner, to implement an alternative chase-based algorithm for checking chase terminsion and compare its performance with our termination algorithms, for simpl-linear and linear rules. We extended VLog reasoner for running Skolem chase with an additional checking that monitors any recursive invocation of Skolem functions during the materalization of the chase instance to decide non-termination for linear tgds. You can run this chase-based termination checking algorithm using the following command:
+
+```
+java -jar chase-termination.jar -f rules.txt -d dbname -u username -p password -v
+```
+Note that the chase-based algorithm requires an extensional database that is specified in the command. We use the scenario with OWL ontologies to compare our termination algorithms with this baseline. The results show significant performance difference for ontologies that both algorithms could successfully decide chase termination. For 28% of the OWL ontologies, the chase-base algorithm fails to decide due to running out of memory. 
+
+[^1]: Calautti, Marco, Mostafa Milani, and Andreas Pieris. "Semi-Oblivious Chase Termination for Linear Existential Rules: An Experimental Study." arXiv preprint arXiv:2303.12851 (2023).
+[^2]: https://github.com/karmaresearch/vlog
