@@ -48,7 +48,7 @@ We use VLog,[^2] a state-of-the-art reasoner, to implement an alternative chase-
 ```
 java -jar chase-termination.jar -f rules.txt -d dbname -u username -p password -v
 ```
-Note that the chase-based algorithm requires an extensional database that is specified in the command. We use the scenario with OWL ontologies to compare our termination algorithms with this baseline. The results show significant performance difference for ontologies that both algorithms could successfully decide chase termination. For 28% of the OWL ontologies, the chase-base algorithm fails to decide due to running out of memory. 
+Note that the chase-based algorithm requires an extensional database that is specified in the command. We use the scenario with OWL ontologies to compare our termination algorithms with this baseline. The results show our algorithm for chase termination runs ~37 times faster that the chase-based baseline algorithm for ~72% of the OWL ontologies that both algorithms could successfully decide chase termination. For ~28% of the ontologies, the chase-base algorithm fails to decide due to running out of memory. 
 
 [^1]: Calautti, Marco, Mostafa Milani, and Andreas Pieris. "Semi-Oblivious Chase Termination for Linear Existential Rules: An Experimental Study." arXiv preprint arXiv:2303.12851 (2023).
 [^2]: https://github.com/karmaresearch/vlog
