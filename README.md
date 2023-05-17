@@ -9,7 +9,7 @@ The structure of the respository is as follows:
 
 ## Checking Chase Termination 
 
-To run the chase termination algorithm for a set of rules "rules.txt", use the following command:
+This work focuses on a type of algorithms based on acyclicity checking in the dependency graph of rules. To run the algorithms for a set of rules "rules.txt", use the following command:
 
 ```
 java -jar chase-termination.jar -l -f rules.txt -d dbname -u username -p password
@@ -43,12 +43,12 @@ For the algorithm for linear rules, which involves dynamic simplification, the t
 
 ## Chase-based Checking 
 
-We use VLog,[^2] a state-of-the-art reasoner, to implement an alternative chase-based algorithm for checking chase terminsion and compare its performance with our termination algorithms, for simpl-linear and linear rules. We extended VLog reasoner for running Skolem chase with an additional checking that monitors any recursive invocation of Skolem functions during the materalization of the chase instance to decide non-termination for linear tgds. You can run this chase-based termination checking algorithm using the following command:
+We use VLog,[^2] a state-of-the-art reasoner, to implement an alternative chase-based algorithm for checking chase terminsion and compare its performance with our termination algorithms, for simpl-linear and linear rules. We extended VLog reasoner for running Skolem chase and materializing the chase instance to decide non-termination for linear and simple-linear tgds. To run this chase-based termination, use the following command:
 
 ```
 java -jar chase-termination.jar -f rules.txt -d dbname -u username -p password -v
 ```
-Note that the chase-based algorithm requires an extensional database that is specified in the command. We use the scenario with OWL ontologies to compare our termination algorithms with this baseline. The results show our algorithm for chase termination runs ~37 times faster that the chase-based baseline algorithm for ~72% of the OWL ontologies that both algorithms could successfully decide chase termination. For ~28% of the ontologies, the chase-base algorithm fails to decide due to running out of memory. 
+Note that the chase-based algorithm requires an extensional database that is specified in the command. We use the scenario with real-world OWL ontologies to compare our termination algorithms with this baseline. The results show our acyclicity-based algorithm for chase termination runs consistently faster that the chase-based baseline algorithm for ~72% of the ontologies that both algorithms could successfully decide chase termination. For ~28% of the ontologies, the chase-base algorithm fails to decide due to running out of memory. 
 
 [^1]: Calautti, Marco, Mostafa Milani, and Andreas Pieris. "Semi-Oblivious Chase Termination for Linear Existential Rules: An Experimental Study." arXiv preprint arXiv:2303.12851 (2023).
 [^2]: https://github.com/karmaresearch/vlog
