@@ -41,7 +41,7 @@ For the algorithm for linear rules, which involves dynamic simplification, the t
 - t_shapes_d, t_shapes_m: The time to find the shapes (in-db and in-memory)
 
 
-## Chase-based Checking 
+## Materialization-based Checking 
 
 We use VLog,[^2], a state-of-the-art reasoner, to implement an alternative materialization-based algorithm for checking chase termination, and compare its performance with our acyclicity-based algorithms, for simpl-linear and linear rules. The materialization-based algorithm constructs the chase instance using the VLog reasoner with input a database and set of rules. By exploiting known bounds on the maximum size that the chase instance w.r.t. linear rules can have when it is finite, our algorithm concludes non-termination if at any point, the instance being built exceeds the bound, otherwise termination is concluded.
 To run the materialization-based algorithm, use the following command:
