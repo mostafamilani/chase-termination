@@ -92,7 +92,6 @@ public class VLogChecker {
         final List<ConjunctiveQuery> graalConjunctiveQueries = new ArrayList<>();
 
         if (program.edb.facts.size() < 1) {
-            program.stats.put(OntologyAnalyzer.TIME_TERMINATES_VLOG, -2);
             return true;
         }
         File file = new File(path + "dlgp");
