@@ -47,9 +47,9 @@ We use VLog,[^2], a state-of-the-art reasoner, to implement an alternative mater
 To run the materialization-based algorithm, use the following command:
 
 ```
-java -jar chase-termination.jar -f rules.txt -d dbname -u username -p password -v
+java -jar chase-termination.jar -f rules.txt -v
 ```
-Note that the materialization-based algorithm requires an extensional database that is specified in the command. We use the scenario with real-world OWL ontologies to compare our acyclicity-based algorithms with this baseline. The results show that for ~28% of the ontologies, the materialization-base algorithm fails to decide due to running out of memory. For the remaining ~72% of the ontologies, our acyclicity-based algorithm for chase termination runs consistently faster that the materialization-based baseline.
+Note that the materialization-based algorithm requires an extensional database that is expected in the input file. We use the scenario with real-world OWL ontologies to compare our acyclicity-based algorithms with this baseline. The results show that for ~28% of the ontologies, the materialization-base algorithm fails to decide due to running out of memory. For the remaining ~72% of the ontologies, our acyclicity-based algorithm for chase termination runs consistently faster that the materialization-based baseline.
 
 [^1]: Calautti, Marco, Mostafa Milani, and Andreas Pieris. "Semi-Oblivious Chase Termination for Linear Existential Rules: An Experimental Study." arXiv preprint arXiv:2303.12851 (2023).
 [^2]: https://github.com/karmaresearch/vlog
