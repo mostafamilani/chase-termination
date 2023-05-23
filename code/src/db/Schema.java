@@ -19,15 +19,19 @@ public class Schema {
     public Map<String, Predicate> predicates = new HashMap<>();
     public Program program;
 
-    public static Schema loadSchema(Connection conn) throws SQLException {
+    public static Schema loadSchema(Connection conn, Program program) throws SQLException {
         Schema schema = new Schema();
         Statement statement = conn.createStatement();
-        statement.execute("select c.relname as table_name, c.reltuples as reltuples, c.relnatts as relnatts\n" +
+        String sql = "select quote_ident(c.\"relname\") as \"table_name\", c.reltuples as reltuples, c.relnatts as relnatts\n" +
                 "from pg_class c\n" +
                 "join pg_namespace n on n.oid = c.relnamespace\n" +
                 "where c.relkind = 'r'\n" +
-                "      and n.nspname not in ('information_schema','pg_catalog')\n" +
-                "order by table_name;");
+//                "      and n.nspname not in ('information_schema','pg_catalog')\n" +
+                "      and n.nspname = '" + program.edb.schemaName + "'\n" +
+                "order by \"table_name\";";
+//        System.out.println("sql = " + sql);
+        statement.execute(sql);
+
         ResultSet resultSet = statement.getResultSet();
         while(resultSet.next()) {
             String name = resultSet.getString("table_name");

@@ -14,6 +14,13 @@ public abstract class Atom {
     public Atom(Predicate predicate, List<Term> terms) {
         this.predicate = predicate;
         this.terms = terms;
+        if (predicate.arity != terms.size()) {
+            String t = "";
+            for (Term term : terms) {
+                t += term;
+            }
+            throw new RuntimeException("Arity does not match" + predicate + " terms " + t);
+        }
     }
 
     public static boolean isFact(List<Term> terms) {

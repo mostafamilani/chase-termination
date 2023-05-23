@@ -12,6 +12,9 @@ public class Database {
     public int size;
     public int limit = Integer.MAX_VALUE;
     public Connection conn;
+    public Set<Fact> facts = new HashSet<>();
+    public Set<Predicate> edbSchema = new HashSet<>();
+    public String schemaName = "";
 
     public boolean isEmpty(Predicate predicate) {
         return !extensional.contains(predicate);

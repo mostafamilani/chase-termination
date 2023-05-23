@@ -2,10 +2,7 @@ package db;
 
 import primitives.*;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class Program {
     public String name;
@@ -42,5 +39,13 @@ public class Program {
             s.append(tgd).append("\n");
         }
         return s.toString();
+    }
+
+    public void removeNonLinearTGDs() {
+        Set<TGD> linears = new HashSet<>();
+        for (TGD tgd : tgds) {
+            if (tgd.body.getAtoms().size() == 1) linears.add(tgd);
+        }
+        tgds = linears;
     }
 }

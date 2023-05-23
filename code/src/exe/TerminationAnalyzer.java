@@ -1,12 +1,9 @@
 package exe;
 
-import exceptions.InvalidOptionException;
 import db.Program;
 import primitives.*;
 
-import java.io.IOException;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.*;
 
@@ -46,22 +43,23 @@ public class TerminationAnalyzer {
         return false;
     }
 
-    public static boolean terminatesLinear(Program program, String[] args) throws IOException, SQLException, InvalidOptionException {
-        Set<Predicate> predicates = new HashSet<>(program.schema.predicates.values());
-
-        String user = AnalyzerExec.getOptionValue(args, "-u", true);
-        String pass = AnalyzerExec.getOptionValue(args, "-p", true);
-        String dbname = AnalyzerExec.getOptionValue(args, "-d", true);
-        int tuples = Integer.parseInt(AnalyzerExec.getOptionValue(args, "-t", true));
-        String url = "jdbc:postgresql://localhost/" + dbname + "?user=" + user + "&password=" + pass;
-        System.out.println("Connecting to the database " + dbname);
-        Connection conn = DriverManager.getConnection(url, user, pass);
+    public static boolean terminatesLinear(Program program, String[] args) throws SQLException {
+        if (program.edb.facts.size() < 1)
+            return true;
+        int tuples = program.edb.limit;
+        Connection conn = program.edb.conn;
 
         long startTime = System.nanoTime();
-        Map<Predicate, Set<String>> deltaShapes = ShapeAnalyzer.findShapes(predicates, program, tuples, conn);
+        Map<Predicate, Set<String>> deltaShapes = ShapeAnalyzer.findShapes(program.edb.edbSchema, program, tuples, conn, false);
         long endTime = System.nanoTime();
         float t_shapes = (endTime - startTime) / 1000000F;
         program.stats.put(OntologyAnalyzer.TIME_FIND_SHAPES, t_shapes);
+
+        startTime = System.nanoTime();
+        ShapeAnalyzer.findShapes(program.edb.edbSchema, program, tuples, conn, true);
+        endTime = System.nanoTime();
+        t_shapes = (endTime - startTime) / 1000000F;
+        program.stats.put(OntologyAnalyzer.TIME_FIND_SHAPES_DB, t_shapes);
 
 
         startTime = System.nanoTime();
@@ -117,6 +115,7 @@ public class TerminationAnalyzer {
         program.stats.put(OntologyAnalyzer.NO_SIMPLE_RULES_D, newProgram.tgds.size());
         program.stats.put(OntologyAnalyzer.NO_SIMPLE_RULES, simplifyCount(program));
         startTime = System.nanoTime();
+        newProgram.depGraph = graph;
         SyntacticAnalyzer.findSpecialFCCs(newProgram);
         endTime = System.nanoTime();
         float t_components = (endTime - startTime) / 1000000F;

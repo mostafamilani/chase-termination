@@ -32,8 +32,9 @@ public class Parser {
             if (line == null) continue;
             if (line.equals("Deterministic DL-clauses: [") ||
                     line.equals("Disjunctive DL-clauses: [") ||
-                    line.equals("ABox: [") ||
                     line.equals("]")) continue;
+            if (line.equals("ABox: ["))
+                loadFacts(program, reader);
             if (line.contains(" v ")) line = line.replaceAll(" v ", ",");
             if (line.contains("=")) continue;
             if (line.replaceAll(" ", "").startsWith(":-")) continue;
@@ -52,6 +53,26 @@ public class Parser {
         String completeName = file.getAbsolutePath();
         program.name = completeName.substring(completeName.lastIndexOf("\\")+1, completeName.lastIndexOf("."));
         return program;
+    }
+
+    private static void loadFacts(Program program, BufferedReader reader) throws IOException {
+        String line = "";
+        while (true) {
+            try {
+                line = reader.readLine();
+                if (line.contains("!=") || line.contains("==")) continue;
+//                System.out.println("line = " + line);
+                if (line == null) return;
+                if (line.equals("]")) return;
+                Atom atom = parse(line, true, program, null);
+                Fact f = new Fact(atom.predicate, atom.terms);
+                program.edb.facts.add(f);
+                program.edb.edbSchema.add(f.predicate);
+            } catch (RuntimeException e) {
+                e.printStackTrace();
+                System.err.println("Could not parse " + line);
+            }
+        }
     }
 
     private static void loadExternalParameter(Program program, String line) {
@@ -181,6 +202,12 @@ public class Parser {
     }
 
     public static Atom parse(String s, boolean body, Program program, Rule... owner) {
+//        System.out.println("before " + s);
+        s = s.replaceAll("\"[^\"]*?,[^\"]*?\"", "");
+        s = s.replaceAll("\"[^\"]*?;[^\"]*?\"", "");
+        s = s.replaceAll("\"[^\"]*[\\(\\)]+[^\"]*\"", "");
+        s = s.replace("\"", "");
+//        System.out.println("after " + s);
         StringTokenizer t = new StringTokenizer(s.replace(" ", ""), "(,=)");
         Atom atom = null;
         if (s.contains("=")) {

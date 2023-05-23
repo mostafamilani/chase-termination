@@ -561,8 +561,11 @@ public class SyntacticAnalyzer {
     }
     public static int simplifyCount(TGD tgd) {
         int c = 0;
-        System.out.println("#Simplifying rule: " + tgd);
-        if (tgd.body.getAtoms().size() != 1) throw new RuntimeException("Simplifying a non linear program!");
+//        System.out.println("#Simplifying rule: " + tgd);
+        if (tgd.body.getAtoms().size() != 1) {
+            System.out.println("tgd = " + tgd);
+            throw new RuntimeException("Simplifying a non linear program!");
+        }
         List<Variable> vs = tgd.body.getAtoms().get(0).getVariables();
         for (int i = 0; i < annotationCounts[vs.size()-1]; i++) {
             if (vs.size() > 10) return 0;

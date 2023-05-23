@@ -26,7 +26,8 @@ public class OntologyAnalyzer {
     public static final String TIME_CONNECTED_COMPONENT = "t_component";
     public static final String TIME_TERMINATES_GRAPH = "t_terminate_graph";
     public static final String TIME_TERMINATES_CHASE = "t_lunatic";
-    public static final String TIME_FIND_SHAPES = "t_shapes";
+    public static final String TIME_FIND_SHAPES = "t_shapes_m";
+    public static final String TIME_FIND_SHAPES_DB = "t_shapes_db";
     public static final String TIME_TERMINATES_GRAPH_D = "t_terminate_graph_d";
     public static final String NO_RULES = "n_rules";
     public static final String NO_SIMPLE_RULES_D = "n_simplified_rules_d";
@@ -45,17 +46,16 @@ public class OntologyAnalyzer {
     public static final String NO_GRAPH_EDGES_D = "n_edges_d";
     public static final String NO_GRAPH_SPECIAL_EDGES_D = "n_special_edges_d";
     public static final String TERMINATES_GRAPH = "terminates_graph";
-    public static final String TERMINATES_CHASE = "terminates_lunatic";
 
     public static void main(String[] args) {
         try {
             String input = AnalyzerExec.getOptionValue(args, "-f", true);
             String output = AnalyzerExec.getOptionValue(args, "-o", true);
 
-
             long endTime, startTime = System.nanoTime();
             Program program = Parser.parseProgram(new File(input));
             program.stats.putAll(program.externalParams);
+            program.stats.put(OntologyAnalyzer.NO_DATA_SIZE, program.edb.facts.size());
             endTime = System.nanoTime();
             program.stats.put(TIME_PARSING, (endTime - startTime) / 1000000F);
 
@@ -93,7 +93,6 @@ public class OntologyAnalyzer {
         out.close();
     }
 
-
     public static void processSyntax(Program program, String[] args) throws SQLException, InvalidOptionException, IOException {
             long endTime, startTime;
             startTime = System.nanoTime();
@@ -116,17 +115,24 @@ public class OntologyAnalyzer {
                 String pass = AnalyzerExec.getOptionValue(args, "-p", true);
                 String dbname = AnalyzerExec.getOptionValue(args, "-d", true);
                 String tuples = AnalyzerExec.getOptionValue(args, "-t", false);
+                String schema = AnalyzerExec.getOptionValue(args, "-s", false);
                 if (tuples != null) program.edb.limit = Integer.parseInt(tuples);
-                String url = "jdbc:postgresql://localhost/" + dbname + "?user=" + user + "&password=" + pass;
+                String url = "jdbc:postgresql://localhost/" + dbname + "?user=" + user + "&password=" + pass + "&stringtype=unspecified&standard_conforming_strings=off";
                 System.out.println("Connecting to the database " + dbname);
                 program.edb.conn = DriverManager.getConnection(url, user, pass);
+                if (schema != null) {
+                    program.edb.conn.setSchema(schema);
+                    program.edb.schemaName = schema;
+                }
+                program.eclass = Program.LINEAR;
+                program.removeNonLinearTGDs();
             }
             boolean terminates;
             if (program.eclass == Program.SIMPLE_LINEAR)
                 terminates = TerminationAnalyzer.terminates(program);
-            else if (program.eclass == Program.LINEAR)
+            else if (program.eclass == Program.LINEAR) {
                 terminates = TerminationAnalyzer.terminatesLinear(program, args);
-            else {
+            } else {
                 System.out.println("The set of rules is not linear.");
                 return;
             }
@@ -134,7 +140,7 @@ public class OntologyAnalyzer {
             endTime = System.nanoTime();
             program.stats.put(TIME_TERMINATES_GRAPH, ((endTime - startTime) / 1000000F) + t_graph + t_components);
             program.stats.put(NO_RULES, program.tgds.size());
-            program.stats.put(NO_DATA_SIZE, computeDBSize(program));
+//            program.stats.put(NO_DATA_SIZE, computeDBSize(program));
             program.stats.put(NO_GRAPH_NODES, program.depGraph.keySet().size());
             program.stats.put(NO_GRAPH_EDGES, program.dpEdges);
             program.stats.put(NO_GRAPH_SPECIAL_EDGES, program.dpEsEdges);

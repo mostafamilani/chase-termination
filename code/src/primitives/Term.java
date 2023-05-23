@@ -9,6 +9,7 @@ public abstract class Term {
     public String label;
     public static Term parse(String s, boolean body, Program program, Rule... owner) {
         Term term;
+        if (s.contains("\"")) s = s.replaceAll(",", "");
         s = Parser.sanitizePredicateName(s);
         if (s.startsWith("z_")) {
             term = Null.fetch(s);

@@ -4,7 +4,6 @@ import exceptions.InvalidOptionException;
 import db.Schema;
 import exe.AnalyzerExec;
 import exe.ShapeAnalyzer;
-import exe.SyntacticAnalyzer;
 import primitives.Predicate;
 
 import java.io.BufferedWriter;
@@ -56,7 +55,7 @@ public class DataGenerator {
         File file = new File(out);
         file.createNewFile();
         BufferedWriter output = new BufferedWriter(new FileWriter(file));
-        Schema schema = Schema.loadSchema(conn);
+        Schema schema = Schema.loadSchema(conn, null);
         for (Predicate p : schema.predicates.values()) {
             output.write(p.name + "," + p.arity);
             output.newLine();
@@ -66,7 +65,7 @@ public class DataGenerator {
 
     private static void fillDatabase(Connection conn, String[] args) throws SQLException, InvalidOptionException {
         int domainSize = Integer.parseInt(AnalyzerExec.getOptionValue(args, "-dm", true));
-        Schema schema = Schema.loadSchema(conn);
+        Schema schema = Schema.loadSchema(conn, null);
         fillDatabase(conn, Integer.parseInt(AnalyzerExec.getOptionValue(args, "-t", true)), schema, domainSize);
     }
 
@@ -99,7 +98,7 @@ public class DataGenerator {
             columnDefinitions.get().append("c_").append(i).append(" TEXT,");
         }
         columnDefinitions.set(new StringBuilder(columnDefinitions.get().substring(0, columnDefinitions.get().length() - 1)));
-        return "create table if not exists " + tableName + " (" +
+        return "create table if not exists \"" + tableName + "\" (" +
                 columnDefinitions +
                 ");";
     }
@@ -113,7 +112,7 @@ public class DataGenerator {
     }
 
     private static void insertRandomRecords(Connection conn, Predicate predicate, int domainSize, int nrecords) throws SQLException {
-        StringBuilder query = new StringBuilder("insert into " + predicate.name + " (");
+        StringBuilder query = new StringBuilder("insert into \"" + predicate.name + "\" (");
         for (int j = 0; j < predicate.arity; j++) {
             query.append("c_").append(j).append(",");
         }
