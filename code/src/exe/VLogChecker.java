@@ -28,32 +28,6 @@ import java.util.concurrent.*;
 import static exe.SyntacticAnalyzer.buildDependencyGraph;
 
 public class VLogChecker {
-    public static void main(String[] args) throws SQLException, IOException {
-        String dbname = "deep";
-//		String dbname = "LUBM100";
-        String user = "postgres";
-        String pass = "admin";
-        String url = "jdbc:postgresql://localhost/" + dbname + "?user=" + user + "&password=" + pass + "&stringtype=unspecified&standard_conforming_strings=off";
-        Connection connection = DriverManager.getConnection(url, user, pass);
-        String path = "C:\\Users\\mmilani7\\Downloads\\real-ont\\";
-        Program program = Parser.parseProgram(new File(path + "deep_100.txt"));
-        Schema schema = Schema.loadSchema(connection, program);
-        System.out.println("schema.predicates.values().size() = " + schema.predicates.values().size());
-        for (Predicate p : schema.predicates.values()) {
-            Set<Fact> facts = loadFacts(p, connection);
-            for (Fact fact : facts) {
-                program.edb.facts.add(fact);
-            }
-        }
-        System.out.println("program.edb.facts.size() = " + program.edb.facts.size());
-        long endTime, startTime;
-        startTime = System.nanoTime();
-        checkTermination(program, path);
-        endTime = System.nanoTime();
-        float time = (endTime - startTime) / 1000000F;
-        System.out.println("time = " + time);
-    }
-
     private static Set<Fact> loadFacts(Predicate p, Connection connection) throws SQLException {
         HashSet<Fact> facts = new HashSet<>();
         Statement statement = connection.createStatement();
@@ -147,8 +121,7 @@ public class VLogChecker {
         Reasoner reasoner = new VLogReasoner(kb);
         kb.addStatements(GraalToRulewerkModelConverter.convertAtomsToFacts(graalAtoms));
         kb.addStatements(GraalToRulewerkModelConverter.convertRules(graalRules));
-        boolean mfa = false;
-        reasoner.isMFC();
+        boolean mfa = reasoner.isMFC();
         file.delete();
         return mfa;
     }

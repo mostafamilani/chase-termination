@@ -1,7 +1,6 @@
 package exe;
 
 import exceptions.InvalidOptionException;
-import exceptions.InvalidProgramException;
 import db.Program;
 import parsing.Parser;
 import primitives.*;
@@ -25,7 +24,7 @@ public class OntologyAnalyzer {
     public static final String TIME_PARSING = "t_parse";
     public static final String TIME_CONNECTED_COMPONENT = "t_component";
     public static final String TIME_TERMINATES_GRAPH = "t_terminate_graph";
-    public static final String TIME_TERMINATES_CHASE = "t_lunatic";
+    public static final String TIME_TERMINATES_CHASE = "t_vlog";
     public static final String TIME_FIND_SHAPES = "t_shapes_m";
     public static final String TIME_FIND_SHAPES_DB = "t_shapes_db";
     public static final String TIME_TERMINATES_GRAPH_D = "t_terminate_graph_d";
@@ -45,7 +44,7 @@ public class OntologyAnalyzer {
     public static final String NO_GRAPH_NODES_D = "n_nodes_d";
     public static final String NO_GRAPH_EDGES_D = "n_edges_d";
     public static final String NO_GRAPH_SPECIAL_EDGES_D = "n_special_edges_d";
-    public static final String TERMINATES_GRAPH = "terminates_graph";
+    public static final String TERMINATES = "terminates";
 
     public static void main(String[] args) {
         try {
@@ -53,13 +52,23 @@ public class OntologyAnalyzer {
             String output = AnalyzerExec.getOptionValue(args, "-o", true);
 
             long endTime, startTime = System.nanoTime();
-            Program program = Parser.parseProgram(new File(input));
+            File inputFile = new File(input);
+            Program program = Parser.parseProgram(inputFile);
+
             program.stats.putAll(program.externalParams);
             program.stats.put(OntologyAnalyzer.NO_DATA_SIZE, program.edb.facts.size());
             endTime = System.nanoTime();
             program.stats.put(TIME_PARSING, (endTime - startTime) / 1000000F);
 
-            processSyntax(program, args);
+            if (AnalyzerExec.checkOption(args, "-v")) {
+                startTime = System.nanoTime();
+                boolean terminates = VLogChecker.checkTermination(Parser.parseProgram(inputFile), ".");
+                endTime = System.nanoTime();
+                program.stats.put(TIME_TERMINATES_CHASE, (endTime - startTime) / 1000000F);
+                program.stats.put(TERMINATES, terminates);
+            } else {
+                processSyntax(program, args);
+            }
 
             exportResults(output, program, AnalyzerExec.checkOption(args, "-a"));
             System.out.println("Checking is complete!");
@@ -147,7 +156,7 @@ public class OntologyAnalyzer {
             program.stats.put(NO_CONNECTED_COMPONENTS, program.nComponents);
             program.stats.put(NO_SPECIAL_CONNECTED_COMPONENTS, program.nSpecialComponents);
             program.stats.put(NO_EVARS, program.nExistential);
-            program.stats.put(TERMINATES_GRAPH, terminates);
+            program.stats.put(TERMINATES, terminates);
             computeArityInfo(program);
     }
 
