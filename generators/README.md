@@ -1,6 +1,6 @@
 # Synthetic Data and Rule Generation
 
-This repository contains generators for synthetic data and rules. The generators receive tuning parameters that characterize the database and the set of rules to be generated. These generators consider possible shape; The data generator selects tuples of different shapes and the rule generator uses atoms of different shapes in the body of the rules. The applications of these generators are briefly explained below.
+This repository contains generators for synthetic data and rules. The generators receive tuning parameters that characterize the database and the set of rules to be generated. These generators can generate database tuples and rules with atoms that have different shapes, which facilitates the evaluation of the chase termination algorithms in this work. The applications of these generators are briefly explained below.
 
 ## Data Generator
 
