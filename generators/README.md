@@ -24,20 +24,15 @@ The data generator makes a database using the given schema details and then fill
 
 ## Rule Generator
 
-For generating synthetic rules, use the following command:
-
-
-
-## Rule Generator
-
 To generate synthetic rules, run the following command:
 
 ```
-java -jar chase-termination.jar -rg [-d dbconfig] -ru n_rules [-pr n_predicates -min min_arity -max max_arity] [-o rules.txt]
+java -jar chase-termination.jar -rg [-l] [-d dbconfig] -ru n_rules [-pr n_predicates -min min_arity -max max_arity] [-o rules.txt]
 ```
 
 The following are the parameters of the rule generator:
 - `-rg`: Specifies rule generation mode.
+- `-l`: (Optional) Indicates linear rule generation. By default, the generator creates simple linear rules.  
 - `-d`: (Optional) The database with an existing schema to be used as the schema for the rules.
 - `-ru`: The number of rules to be generated.
 - `-o`: (Optional) The output file for the rules. If not specified, the default is `rules.txt` in the current directory.
