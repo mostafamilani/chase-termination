@@ -1,6 +1,6 @@
 # Synthetic Data and Rule Generation
 
-This repository is dedicated to the generation of synthetic data and rules. Here, we provide tools capable of producing database tuples and rules with varying structures. These tools are designed to assist in the evaluation of chase termination algorithms. Below, we introduce the applications of our generators.
+This repository is dedicated to the generation of synthetic data and rules. Here, we provide generators capable of producing databases and rules with varying structures. These generators are designed to assist in the evaluation of chase termination algorithms. Below, we introduce the applications of our generators.
 
 ## Data Generator
 
