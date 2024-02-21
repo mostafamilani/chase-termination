@@ -1,55 +1,45 @@
 # Overview
 
-This repository contains a tool for checking the termination of the chase procedure when applied for linear and simple-linear existential rules. The tool is based on the algorithms in the paper **"Semi-Oblivious Chase Termination for Linear Existential Rules: An Experimental Study"**.[^1] The repository also includes a data generator and rule generator for testing the tool, and sample scenarios with data and rules that are generated using the data and rule generators.
+This repository has a tool to check if the chase process finishes when using linear and simple linear rules. It's based on the methods from the paper **"Semi-Oblivious Chase Termination for Linear Existential Rules: An Experimental Study"**.[^1] The repository also offers a data generator and a rule generator to help test the tool, plus examples of data and rules made with these generators.
 
-The structure of the respository is as follows:
-- \"scenarios\" includes sample data and rules and their description. 
-- \"generators\" contains the data generator and the rule generator and a brief description of how they can be used.
-- \"code\" includes the complete implementation of the termination algorithm for simple-linear and linear rules.
+What's inside the repository:
+- `scenarios` has examples of data and rules with explanations.
+- `generators` includes the tools to create data and rules, with a short guide on how to use them.
+- `code` contains all the code needed to run the tool for checking if the chase process with linear and simple-linear rules ends.
 
 ## Checking Chase Termination 
 
 This work focuses on a type of algorithms based on acyclicity checking in the dependency graph of rules. To run the algorithms for a set of rules "rules.txt", use the following command:
 
 ```
-java -jar chase-termination.jar -l -f rules.txt -d dbname -u username -p password
+java -jar chase-termination.jar -f input-file [-l -d dbconfig] [-o output.txt]
 ```
 
-The option "-l" specifies whether the tool should run the termination algorithm for linear rules; if this option is missing, the tool will run the algorithm for simple-linear rules. The option "-f" is required and specifies the file containing the set of rules. 
 
-When "-l" is present, the tool requires the database connection information specified by "-d dbname", "-u username", and "-p password". However, when "-l" is not given for simple-linear rules, these options are optional. If the database is missing, the algorithm for simple-linear rules assumes that for each relation, there is at least one tuple in the database for that relation.
+Options explained:
+- `-f`: Specifies the path of the ontology input file for the chase termination process. This option is required.
+- `-o`: (Optional) Outputs to the specified file and its path. The default output file is named `input-file.res`, located in the same directory as the input file.
+- `-l`: (Optional) Enables checking for linear rules. By default, the tool checks for simple linear rules.
+- `-d`: Specifies the database configuration file. This is used for operations requiring database access.
+- `-ln`: (Optional) Removes non-linear rules before checking for termination.
 
-The option "-t n_tuples" is related to the algorithm for linear rules and specifies the number of tuples in each relation in the termination algorithm. If this option is missing, the algorithm uses all tuples in the relations.
+When `-l` is used, the tool checks for linear rules and requires a database configuration file specified by `-d dbconfig`. If `-l` is not included, implying the check is for simple-linear rules, the database information becomes optional. The tool assumes there's at least one tuple in the database for each relation if no database is specified.
 
-To specify an output file name, use the option "-o output.res". The default output file name is "rules.res" if the input file is "rules.txt".
+To change the output file name from the default, use the `-o` option followed by your preferred file name. For example, `-o output.res` changes the output file name to `output.res`. The default behavior is to name the output file `input-file.res` based on the input file name.
 
-The tool executes the chase termination algorithm and returns whether the chase terminates. Additionally, the output file contains statistics about the program.
+The tool runs the chase termination algorithm and tells you if the chase will stop. The output file also gives statistics about the run:
 
-- terminates: true if the chase terminates; false otherwise.
-- avg_arity, max_arity, min_arity: The average, maximum, and minimum arities of the predicates.
-- n_rules, n_predicates, n_exist_vars: The numbers of rules, predicates, and the existential variables in the rules.
-- n_nodes, n_edges, n_components, n_special_components, n_special_edges: The numbers of nodes, edges, strongly connected components, and strongly connected components with special edges, and number of special edges in the dependency graph of the set of rules.
-- t_parse: The time to parse the rules in the input file.
-- t_graph: The time to build the dependency graph.
-- t_comp: The time to find strongly connected components with a special edge and check for their support.
-- t_terminate: The end-to-end time to check termination.
+- `terminates`: `true` if the chase stops; `false` if it doesn’t.
+- `avg_arity`, `max_arity`, `min_arity`: Average, maximum, and minimum numbers arity of the predicates.
+- `n_rules`, `n_predicates`, `n_exist_vars`: Counts of rules, predicates, and existential variables in the rules.
+- `n_nodes`, `n_edges`, `n_special_components`, `n_special_edges`: Counts of nodes, edges, special strongly connected components, and special edges in the rule set's dependency graph.
+- `t_parse`: Time it takes to read the rules from the input file.
+- `t_graph`: Time to make the dependency graph.
+- `t_comp`: Time to identify strongly connected components with a special edge and to check their support.
+- `t_terminate`: Total time from start to finish to check if the chase stops.
 
-For the algorithm for linear rules, which involves dynamic simplification, the tool returns additional statistics related to dynamic simplification:
-- n_nodes_d, n_edges_d, n_special_edges_d, n_components_d, n_special_components_d: The numbers of nodes, edges, special edges, strongly connected components, and strongly connected components with a special edge in the dependency graph of the dynamically simplified rules. 
-- n_facts, n_shapes: The numbers of facts and shapes in the database.
-- t_graph_d: The time required to build the dependency graph of the dynamically simplified rules. 
-- t_shapes_d, t_shapes_m: The time to find the shapes (in-db and in-memory)
-
-
-## Materialization-based Checking 
-
-We use VLog,[^2], a state-of-the-art reasoner, to implement an alternative materialization-based algorithm for checking chase termination, and compare its performance with our acyclicity-based algorithms, for simpl-linear and linear rules. The materialization-based algorithm constructs the chase instance using the VLog reasoner with input a database and set of rules. By exploiting known bounds on the maximum size that the chase instance w.r.t. linear rules can have when it is finite, our algorithm concludes non-termination if at any point, the instance being built exceeds the bound, otherwise termination is concluded.
-To run the materialization-based algorithm, use the following command:
-
-```
-java -jar chase-termination.jar -f rules.txt -v
-```
-Note that the materialization-based algorithm requires an extensional database that is expected in the input file. We use the scenario with real-world OWL ontologies to compare our acyclicity-based algorithms with this baseline. The results show that for ~28% of the ontologies, the materialization-base algorithm fails to decide due to running out of memory. For the remaining ~72% of the ontologies, our acyclicity-based algorithm for chase termination runs consistently faster that the materialization-based baseline.
+For linear rules, which include dynamic simplification, the tool gives extra stats related to this process:
+- `n_facts`, `n_shapes`: Numbers of facts and shapes in the database.
+- `t_shapes`: Time to find shapes.
 
 [^1]: Calautti, Marco, Mostafa Milani, and Andreas Pieris. "Semi-Oblivious Chase Termination for Linear Existential Rules: An Experimental Study." arXiv preprint arXiv:2303.12851 (2023).
-[^2]: https://github.com/karmaresearch/vlog
