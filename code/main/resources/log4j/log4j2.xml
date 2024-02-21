@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="INFO" name="MyApp">
+    <Appenders>
+        <!-- Console Appender with colored output -->
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{YYYY/MM/dd - HH:mm:ss} %highlight{%-5level}{FATAL=red, ERROR=red, WARN=yellow, INFO=green, DEBUG=blue, TRACE=white} %highlight{%logger{36}}{FATAL=blue, ERROR=blue, WARN=blue, INFO=blue, DEBUG=blue, TRACE=blue} - %msg%n"/>
+        </Console>
+    </Appenders>
+
+    <Loggers>
+        <!-- Root logger to route log messages to the Console Appender -->
+        <Root level="INFO" includeLocation="true">
+            <AppenderRef ref="Console"/>
+        </Root>
+    </Loggers>
+</Configuration>
